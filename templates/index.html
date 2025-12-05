@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Toolkit - Your Online PDF Solution</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .tool-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .tool-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .tool-card h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .tool-card p {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .upload-area {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+
+        .drop-zone {
+            border: 3px dashed #667eea;
+            border-radius: 10px;
+            padding: 60px 20px;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .drop-zone.active {
+            border-color: #764ba2;
+            background: #e9ecef;
+        }
+
+        .drop-zone i {
+            font-size: 4rem;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .file-list {
+            margin: 20px 0;
+        }
+
+        .file-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .options-panel {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .option-group {
+            margin-bottom: 15px;
+        }
+
+        .option-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .option-group select,
+        .option-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            padding: 20px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>PDF Toolkit</h1>
+            <p>Your all-in-one online PDF solution</p>
+        </header>
+
+        <div class="tool-grid">
+            <div class="tool-card" onclick="showTool('merge')">
+                <div class="tool-icon">📄</div>
+                <h3>Merge PDF</h3>
+                <p>Combine multiple PDF files into one</p>
+            </div>
+
+            <div class="tool-card" onclick="showTool('split')">
+                <div class="tool-icon">✂️</div>
+                <h3>Split PDF</h3>
+                <p>Split PDF into multiple files</p>
+            </div>
+
+            <div class="tool-card" onclick="showTool('compress')">
+                <div class="tool-icon">🗜️</div>
+                <h3>Compress PDF</h3>
+                <p>Reduce PDF file size</p>
+            </div>
+
+            <div class="tool-card" onclick="showTool('pdf-to-images')">
+                <div class="tool-icon">🖼️</div>
+                <h3>PDF to Images</h3>
+                <p>Convert PDF pages to images</p>
+            </div>
+
+            <div class="tool-card" onclick="showTool('protect')">
+                <div class="tool-icon">🔒</div>
+                <h3>Protect PDF</h3>
+                <p>Add password protection</p>
+            </div>
+
+            <div class="tool-card" onclick="showTool('unlock')">
+                <div class="tool-icon">🔓</div>
+                <h3>Unlock PDF</h3>
+                <p>Remove password protection</p>
+            </div>
+        </div>
+
+        <div id="tool-interface" class="hidden">
+            <div class="upload-area">
+                <h2 id="tool-title">Select a Tool</h2>
+                <p id="tool-description">Choose a tool from above to get started</p>
+
+                <div id="upload-section" class="hidden">
+                    <div class="drop-zone" id="dropZone">
+                        <i>📁</i>
+                        <h3>Drop your files here</h3>
+                        <p>or click to browse</p>
+                        <input type="file" id="fileInput" multiple accept=".pdf,.jpg,.jpeg,.png" class="hidden">
+                    </div>
+
+                    <div id="file-list" class="file-list"></div>
+
+                    <div id="options-panel" class="options-panel hidden">
+                        <!-- Dynamic options will be inserted here -->
+                    </div>
+
+                    <div class="progress-bar hidden" id="progressBar">
+                        <div class="progress" id="progress"></div>
+                    </div>
+
+                    <button id="process-btn" class="btn" disabled>Process Files</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 PDF Toolkit. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let currentTool = '';
+        let uploadedFiles = [];
+
+        function showTool(tool) {
+            currentTool = tool;
+            document.getElementById('tool-interface').classList.remove('hidden');
+            document.getElementById('upload-section').classList.remove('hidden');
+
+            const toolConfigs = {
+                'merge': {
+                    title: 'Merge PDF Files',
+                    description: 'Combine multiple PDF files into one document',
+                    multiple: true,
+                    accept: '.pdf'
+                },
+                'split': {
+                    title: 'Split PDF File',
+                    description: 'Split a PDF into multiple files or extract specific pages',
+                    multiple: false,
+                    accept: '.pdf'
+                },
+                'compress': {
+                    title: 'Compress PDF',
+                    description: 'Reduce PDF file size while maintaining quality',
+                    multiple: false,
+                    accept: '.pdf'
+                },
+                'pdf-to-images': {
+                    title: 'PDF to Images',
+                    description: 'Convert PDF pages to image files (PNG, JPG)',
+                    multiple: false,
+                    accept: '.pdf'
+                },
+                'protect': {
+                    title: 'Protect PDF',
+                    description: 'Add password protection to your PDF',
+                    multiple: false,
+                    accept: '.pdf'
+                },
+                'unlock': {
+                    title: 'Unlock PDF',
+                    description: 'Remove password protection from PDF',
+                    multiple: false,
+                    accept: '.pdf'
+                }
+            };
+
+            const config = toolConfigs[tool];
+            document.getElementById('tool-title').textContent = config.title;
+            document.getElementById('tool-description').textContent = config.description;
+            document.getElementById('fileInput').multiple = config.multiple;
+            document.getElementById('fileInput').accept = config.accept;
+
+            showOptions(tool);
+            resetUploadArea();
+        }
+
+        function showOptions(tool) {
+            const optionsPanel = document.getElementById('options-panel');
+            optionsPanel.innerHTML = '';
+
+            const optionTemplates = {
+                'split': `
+                    <div class="option-group">
+                        <label for="pages">Pages to Split:</label>
+                        <input type="text" id="pages" placeholder="e.g., 1-3, 5, 7-9 or leave empty for all pages">
+                        <small>Separate pages/ranges with commas</small>
+                    </div>
+                `,
+                'compress': `
+                    <div class="option-group">
+                        <label for="quality">Compression Quality:</label>
+                        <select id="quality">
+                            <option value="low">Low Compression (Better Quality)</option>
+                            <option value="medium" selected>Medium Compression</option>
+                            <option value="high">High Compression (Smaller Size)</option>
+                        </select>
+                    </div>
+                `,
+                'pdf-to-images': `
+                    <div class="option-group">
+                        <label for="format">Output Format:</label>
+                        <select id="format">
+                            <option value="png">PNG</option>
+                            <option value="jpg">JPG</option>
+                        </select>
+                    </div>
+                `,
+                'protect': `
+                    <div class="option-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" placeholder="Enter password" required>
+                    </div>
+                `,
+                'unlock': `
+                    <div class="option-group">
+                        <label for="unlock-password">PDF Password:</label>
+                        <input type="password" id="unlock-password" placeholder="Enter PDF password" required>
+                    </div>
+                `
+            };
+
+            if (optionTemplates[tool]) {
+                optionsPanel.innerHTML = optionTemplates[tool];
+                optionsPanel.classList.remove('hidden');
+            } else {
+                optionsPanel.classList.add('hidden');
+            }
+        }
+
+        // File handling
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('file-list');
+        const processBtn = document.getElementById('process-btn');
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('active');
+        });
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('active');
+        });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('active');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            uploadedFiles = Array.from(files);
+            updateFileList();
+            updateProcessButton();
+        }
+
+        function updateFileList() {
+            fileList.innerHTML = '';
+            uploadedFiles.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <span>${file.name} (${formatFileSize(file.size)})</span>
+                    <button onclick="removeFile(${index})">❌</button>
+                `;
+                fileList.appendChild(fileItem);
+            });
+        }
+
+        function removeFile(index) {
+            uploadedFiles.splice(index, 1);
+            updateFileList();
+            updateProcessButton();
+        }
+
+        function updateProcessButton() {
+            const minFiles = currentTool === 'merge' ? 2 : 1;
+            processBtn.disabled = uploadedFiles.length < minFiles;
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function resetUploadArea() {
+            uploadedFiles = [];
+            fileList.innerHTML = '';
+            processBtn.disabled = true;
+            document.getElementById('progressBar').classList.add('hidden');
+            document.getElementById('progress').style.width = '0%';
+        }
+
+        // Process files
+        processBtn.addEventListener('click', processFiles);
+
+        async function processFiles() {
+    const progressBar = document.getElementById('progressBar');
+    const progress = document.getElementById('progress');
+    
+    progressBar.classList.remove('hidden');
+    processBtn.disabled = true;
+
+    try {
+        // Show initial progress
+        progress.style.width = '30%';
+
+        const formData = new FormData();
+        
+        // Add files - use 'file' for single file tools, 'files' for merge
+        if (currentTool === 'merge') {
+            uploadedFiles.forEach(file => {
+                formData.append('files', file);
+            });
+        } else {
+            // Single file tools
+            if (uploadedFiles.length > 0) {
+                formData.append('file', uploadedFiles[0]);
+            } else {
+                throw new Error('No files uploaded');
+            }
+        }
+
+        // Add tool-specific options
+        const options = getToolOptions();
+        for (const [key, value] of Object.entries(options)) {
+            if (value) { // Only add if value exists
+                formData.append(key, value);
+            }
+        }
+
+        progress.style.width = '60%';
+
+        const endpoint = getEndpoint();
+        console.log('Sending request to:', endpoint);
+        
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            body: formData
+        });
+
+        progress.style.width = '90%';
+
+        // Check if response is JSON (error) or file (success)
+        const contentType = response.headers.get('content-type');
+        
+        if (!response.ok) {
+            // Try to parse error as JSON first
+            if (contentType && contentType.includes('application/json')) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || `Server error: ${response.status}`);
+            } else {
+                // If not JSON, get the text and show generic error
+                const errorText = await response.text();
+                console.error('Server returned HTML error:', errorText.substring(0, 200));
+                throw new Error(`Server error: ${response.status}. Please check the server logs.`);
+            }
+        }
+
+        // Check if we received a file
+        if (contentType && (
+            contentType.includes('application/pdf') || 
+            contentType.includes('application/zip') ||
+            contentType.includes('application/octet-stream')
+        )) {
+            const blob = await response.blob();
+            
+            // Check if blob is valid
+            if (blob.size === 0) {
+                throw new Error('Received empty file from server');
+            }
+
+            // Create download link
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = getDownloadFilename();
+            document.body.appendChild(a);
+            a.click();
+            
+            // Cleanup
+            setTimeout(() => {
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            }, 100);
+
+            progress.style.width = '100%';
+            
+            // Reset after successful processing
+            setTimeout(() => {
+                resetUploadArea();
+                progressBar.classList.add('hidden');
+            }, 2000);
+        } else {
+            // Unexpected content type
+            const responseData = await response.text();
+            console.error('Unexpected response:', responseData.substring(0, 200));
+            throw new Error('Server returned unexpected response format');
+        }
+        
+    } catch (error) {
+        console.error('Processing error:', error);
+        alert('Error processing files: ' + error.message);
+        progressBar.classList.add('hidden');
+    } finally {
+        processBtn.disabled = false;
+    }
+}
+
+        function getToolOptions() {
+            const options = {};
+            
+            switch(currentTool) {
+                case 'split':
+                    options.pages = document.getElementById('pages')?.value || 'all';
+                    break;
+                case 'compress':
+                    options.quality = document.getElementById('quality')?.value || 'medium';
+                    break;
+                case 'pdf-to-images':
+                    options.format = document.getElementById('format')?.value || 'png';
+                    break;
+                case 'protect':
+                    options.password = document.getElementById('password')?.value;
+                    break;
+                case 'unlock':
+                    options.password = document.getElementById('unlock-password')?.value;
+                    break;
+            }
+            
+            return options;
+        }
+
+        function getEndpoint() {
+            const endpoints = {
+                'merge': '/merge',
+                'split': '/split',
+                'compress': '/compress',
+                'pdf-to-images': '/pdf-to-images',
+                'protect': '/protect',
+                'unlock': '/unlock'
+            };
+            return endpoints[currentTool];
+        }
+
+        function getDownloadFilename() {
+            const filenames = {
+                'merge': 'merged.pdf',
+                'split': 'split_pages.zip',
+                'compress': 'compressed.pdf',
+                'pdf-to-images': 'converted_images.zip',
+                'protect': 'protected.pdf',
+                'unlock': 'unlocked.pdf'
+            };
+            return filenames[currentTool];
+        }
+    </script>
+</body>
+</html>
