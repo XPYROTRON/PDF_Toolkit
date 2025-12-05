@@ -142,13 +142,15 @@ Install dependencies:
 
 bash
 
-pip install -r requirements.txt
+`pip install -r requirements.txt
+`
 
 Run the application:
 
 bash
 
-python app.py
+`python app.py
+`
 
 Open your browser and go to: http://localhost:5000
 
